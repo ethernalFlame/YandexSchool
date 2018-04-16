@@ -27,6 +27,7 @@ import com.vk.sdk.api.model.VKPhotoArray;
 import com.vk.sdk.api.model.VKPhotoSizes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,49 +62,67 @@ public class MainActivity extends AppCompatActivity {
                         VKPhotoArray list = (VKPhotoArray) response.parsedModel;
                         dataGrid = new ArrayList<>();
                         int i=0;
+
                         for (VKApiPhoto photo:
                              list) {
+                            Character[] characters = new Character[10];
                             GridItem item = new GridItem();
-                            if (photo.photo_2560!=null)
-                                item.setImage(photo.photo_2560);
-                            else if (photo.photo_1280!=null)
-                                item.setImage(photo.photo_1280);
-                            else if (photo.photo_807!=null)
-                                item.setImage(photo.photo_807);
-                            else if (photo.photo_604!=null)
-                                item.setImage(photo.photo_604);
-                            else if (photo.photo_130!=null)
-                                item.setImage(photo.photo_130);
-                            else if (photo.photo_75!=null)
-                                item.setImage(photo.photo_75);
+//                            if (photo.photo_2560!=null)
+//                                item.setImage(photo.photo_2560);
+//                            else if (photo.photo_1280!=null)
+//                                item.setImage(photo.photo_1280);
+//                            else if (photo.photo_807!=null)
+//                                item.setImage(photo.photo_807);
+//                            else if (photo.photo_604!=null)
+//                                item.setImage(photo.photo_604);
+//                            else if (photo.photo_130!=null)
+//                                item.setImage(photo.photo_130);
+//                            else if (photo.photo_75!=null)
+//                                item.setImage(photo.photo_75);
+//                            if (!item.getImage().equals(""))
+                            if (photo.src.size()!=0){
+                               // System.out.println(Arrays.toString(photo.src.));
+                                if (photo.src.getByType('w')!=null)
+                                    item.setImage(photo.src.getByType('w')); else
+                                if (photo.src.getByType('z')!=null)
+                                    item.setImage(photo.src.getByType('z')); else
+                                if (photo.src.getByType('y')!=null)
+                                    item.setImage(photo.src.getByType('y')); else
+                                if (photo.src.getByType('r')!=null)
+                                    item.setImage(photo.src.getByType('r')); else
+                                if (photo.src.getByType('q')!=null)
+                                    item.setImage(photo.src.getByType('q')); else
+                                if (photo.src.getByType('p')!=null)
+                                    item.setImage(photo.src.getByType('p')); else
+                                if (photo.src.getByType('o')!=null)
+                                    item.setImage(photo.src.getByType('o')); else
+                                if (photo.src.getByType('x')!=null)
+                                    item.setImage(photo.src.getByType('x')); else
+                                if (photo.src.getByType('m')!=null)
+                                    item.setImage(photo.src.getByType('m')); else
+                                if (photo.src.getByType('s')!=null)
+                                    item.setImage(photo.src.getByType('s'));
+
+
+
+
+
+                            }
+
+
                             if (!item.getImage().equals(""))
                             dataGrid.add(item);
-                            System.out.println(item.getImage() + " image src " + i);
+                          //  System.out.println(item.getImage() + " image src " + i);
                             i++;
                         }
-                        System.out.println(dataGrid.size());
+                       // System.out.println(dataGrid.size());
                         adapter = new GridViewAdapter(MainActivity.this, R.layout.grid_item_layout, dataGrid);
 
 
 
 
                         gridView.setAdapter(adapter);
-
-
-                       // VKApiPhoto photo = list.get(0);
-
-                        //imageView = findViewById(R.id.image_view);
-                       // Picasso.get().load(photo.photo_604).into(imageView);
-
-                            //Picasso.get().load(photo.photo_604).into();
-                        //}
                         Toast.makeText(MainActivity.this, "Кол-во фоток: "+ list.size(), Toast.LENGTH_SHORT).show();
-
-//                        for (VKApiPhoto photo:
-//                             list) {
-//
-//                        }
-
 
                     }
 
