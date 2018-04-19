@@ -19,10 +19,15 @@ public class PageFragment extends Fragment {
     private int mPage;
 
     public static PageFragment newInstance(int page) {
+        PageFragment fragment;
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        PageFragment fragment = new PageFragment();
+        if (page==2)
+            fragment = new YourSavedPicsFragment();
+        else
+            fragment = new PageFragment();
         fragment.setArguments(args);
+        System.out.println(page + "page number");
         return fragment;
     }
 
