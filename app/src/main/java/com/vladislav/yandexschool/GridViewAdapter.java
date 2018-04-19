@@ -55,7 +55,7 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
 
         GridItem item = mGridData.get(position);
         System.out.println(position);
-        Picasso.get().load(item.getImage()).into(holder.imageView);
+        Picasso.get().load(item.getImage()).noFade().into(holder.imageView);
         return row;
     }
 

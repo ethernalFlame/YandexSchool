@@ -2,6 +2,8 @@ package com.vladislav.yandexschool;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         VKSdk.login(this, scope);
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(
+                new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
 
     }
 
@@ -61,27 +68,11 @@ public class MainActivity extends AppCompatActivity {
                         gridView = findViewById(R.id.grid_view);
                         VKPhotoArray list = (VKPhotoArray) response.parsedModel;
                         dataGrid = new ArrayList<>();
-                        int i=0;
 
                         for (VKApiPhoto photo:
                              list) {
-                            Character[] characters = new Character[10];
                             GridItem item = new GridItem();
-//                            if (photo.photo_2560!=null)
-//                                item.setImage(photo.photo_2560);
-//                            else if (photo.photo_1280!=null)
-//                                item.setImage(photo.photo_1280);
-//                            else if (photo.photo_807!=null)
-//                                item.setImage(photo.photo_807);
-//                            else if (photo.photo_604!=null)
-//                                item.setImage(photo.photo_604);
-//                            else if (photo.photo_130!=null)
-//                                item.setImage(photo.photo_130);
-//                            else if (photo.photo_75!=null)
-//                                item.setImage(photo.photo_75);
-//                            if (!item.getImage().equals(""))
-                            if (photo.src.size()!=0){
-                               // System.out.println(Arrays.toString(photo.src.));
+                                if (photo.src.size()!=0){
                                 if (photo.src.getByType('w')!=null)
                                     item.setImage(photo.src.getByType('w')); else
                                 if (photo.src.getByType('z')!=null)
@@ -102,25 +93,13 @@ public class MainActivity extends AppCompatActivity {
                                     item.setImage(photo.src.getByType('m')); else
                                 if (photo.src.getByType('s')!=null)
                                     item.setImage(photo.src.getByType('s'));
-
-
-
-
-
                             }
 
 
                             if (!item.getImage().equals(""))
                             dataGrid.add(item);
-                          //  System.out.println(item.getImage() + " image src " + i);
-                            i++;
                         }
-                       // System.out.println(dataGrid.size());
                         adapter = new GridViewAdapter(MainActivity.this, R.layout.grid_item_layout, dataGrid);
-
-
-
-
                         gridView.setAdapter(adapter);
                         Toast.makeText(MainActivity.this, "Кол-во фоток: "+ list.size(), Toast.LENGTH_SHORT).show();
 
