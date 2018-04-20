@@ -2,11 +2,14 @@ package com.vladislav.yandexschool;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +42,7 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, ViewGroup parent) {
         View row = convertView;
         ViewHolder holder;
 
@@ -48,17 +51,38 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageView =  row.findViewById(R.id.iv_Grid);
+
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
         }
 
         GridItem item = mGridData.get(position);
-        System.out.println(position);
         Picasso.get().load(item.getImage()).noFade().into(holder.imageView);
+        final MainActivity main = (MainActivity) mContext;
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((Activity) mContext).setContentView(R.layout.picture_layout);
+                LinearLayout layout = main.findViewById(R.id.picture_layout);
+                ImageView tmp = main.findViewById(R.id.picture_full);
+                main.findViewById(R.id.picture_layout).setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        System.out.println("ПРИВЕТ " + i + " " + keyEvent.getKeyCode());
+                        if (i == KeyEvent.KEYCODE_BACK) {
+                            ((MainActivity) mContext).setContentView(R.layout.activity_main);
+                            return true;
+                        }return false;
+                    }
+                });
+                Picasso.get().load(mGridData.get(position).getImage()).noFade().into(tmp);
+
+            }
+        });
         return row;
     }
-
     static class ViewHolder {
         ImageView imageView;
     }

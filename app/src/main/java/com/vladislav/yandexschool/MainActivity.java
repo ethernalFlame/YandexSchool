@@ -6,8 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
@@ -34,17 +37,24 @@ public class MainActivity extends AppCompatActivity {
     private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL, VKScope.PHOTOS};
 
     @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        System.out.println("воу");
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         VKSdk.login(this, scope);
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(
                 new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
