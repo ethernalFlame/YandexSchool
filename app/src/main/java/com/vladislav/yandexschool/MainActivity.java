@@ -1,5 +1,6 @@
 package com.vladislav.yandexschool;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,9 +32,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ImageView imageView;
-    GridView gridView;
-    GridViewAdapter adapter;
-    ArrayList<GridItem> dataGrid;
+    static GridView gridView;
+    //static GridViewAdapter adapter;
+    static ArrayList<GridItem> dataGrid;
     private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL, VKScope.PHOTOS};
 
     @Override
@@ -48,13 +49,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         VKSdk.login(this, scope);
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(
-                new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
+
     }
 
+//    public static void initPhotos(Context context){
+//        adapter = new GridViewAdapter(context, R.layout.grid_item_layout, dataGrid);
+//        gridView.setAdapter(adapter);
+//    }
+
+    public static ArrayList<GridItem> getDataGrid(){
+        return dataGrid;
+    }
+
+    public static GridView getGrid(){
+        return gridView;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -100,9 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
                             if (!item.getImage().equals(""))
                                 dataGrid.add(item);
+                          //  initPhotos(MainActivity.this);
                         }
-                        adapter = new GridViewAdapter(MainActivity.this, R.layout.grid_item_layout, dataGrid);
-                        gridView.setAdapter(adapter);
+                        ViewPager viewPager = findViewById(R.id.view_pager);
+                        viewPager.setAdapter(
+                                new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+                        TabLayout tabLayout = findViewById(R.id.tab_layout);
+                        tabLayout.setupWithViewPager(viewPager);
                         Toast.makeText(MainActivity.this, "Кол-во фоток: " + list.size(), Toast.LENGTH_SHORT).show();
 
                     }
@@ -123,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+
+
 
             @Override
             public void onError(VKError error) {

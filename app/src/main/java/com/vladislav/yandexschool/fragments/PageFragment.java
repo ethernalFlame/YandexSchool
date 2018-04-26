@@ -1,4 +1,4 @@
-package com.vladislav.yandexschool;
+package com.vladislav.yandexschool.fragments;
 
 
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.vladislav.yandexschool.R;
 
 /**
  * Created by vladi on 19.04.2018.
@@ -22,9 +24,6 @@ public class PageFragment extends Fragment {
         PageFragment fragment;
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        if (page==2)
-            fragment = new YourSavedPicsFragment();
-        else
             fragment = new PageFragment();
         fragment.setArguments(args);
         System.out.println(page + "page number");
@@ -36,6 +35,7 @@ public class PageFragment extends Fragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
+        System.out.println("onCreate " + mPage);
     }
 
     @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

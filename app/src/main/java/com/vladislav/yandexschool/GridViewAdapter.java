@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,21 +66,11 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((Activity) mContext).setContentView(R.layout.picture_layout);
-                LinearLayout layout = main.findViewById(R.id.picture_layout);
+                main.setContentView(R.layout.picture_layout);
                 ImageView tmp = main.findViewById(R.id.picture_full);
-                main.findViewById(R.id.picture_layout).setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                        System.out.println("ПРИВЕТ " + i + " " + keyEvent.getKeyCode());
-                        if (i == KeyEvent.KEYCODE_BACK) {
-                            ((MainActivity) mContext).setContentView(R.layout.activity_main);
-                            return true;
-                        }return false;
-                    }
-                });
+                main.getSupportActionBar().hide();
+                main.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 Picasso.get().load(mGridData.get(position).getImage()).noFade().into(tmp);
-
             }
         });
         return row;
