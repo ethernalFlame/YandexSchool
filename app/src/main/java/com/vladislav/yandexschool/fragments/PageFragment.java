@@ -30,15 +30,16 @@ public class PageFragment extends Fragment {
         return fragment;
     }
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
-        System.out.println("onCreate " + mPage);
     }
 
-    @Override public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                        Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_page, container, false);
         TextView textView = (TextView) view;

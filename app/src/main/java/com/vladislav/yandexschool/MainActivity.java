@@ -1,17 +1,14 @@
 package com.vladislav.yandexschool;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
-import android.view.View;
+import android.view.MenuItem;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
@@ -25,45 +22,67 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKPhotoArray;
+import com.vladislav.yandexschool.fragments.YourSavedPicsFragment;
 
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView imageView;
+    private ViewPager viewPager;
     static GridView gridView;
-    //static GridViewAdapter adapter;
+    private int previousLayout;
     static ArrayList<GridItem> dataGrid;
     private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL, VKScope.PHOTOS};
 
+    public final static String PICTURE = "PICTURE";
+
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
-        System.out.println("воу");
+        super.onBackPressed();
+        //getPreviousLayout();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
+        setContentView(R.layout.activity_main);
+        previousLayout = R.layout.activity_main;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         VKSdk.login(this, scope);
 
     }
 
-//    public static void initPhotos(Context context){
-//        adapter = new GridViewAdapter(context, R.layout.grid_item_layout, dataGrid);
-//        gridView.setAdapter(adapter);
-//    }
+    public int getPreviousLayout() {
+        viewPager.setAdapter(
+                new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
+        GridViewAdapter adapter = new GridViewAdapter(this, R.layout.grid_item_layout, MainActivity.getDataGrid());
+        gridView.setAdapter(adapter);
+
+        setContentView(R.layout.activity_main);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        return previousLayout;
+    }
+
+    public void setPreviousLayout(int previousLayout) {
+        this.previousLayout = previousLayout;
+    }
 
     public static ArrayList<GridItem> getDataGrid(){
         return dataGrid;
     }
 
-    public static GridView getGrid(){
+    public static GridView getGridView(){
         return gridView;
     }
+
+    public static void setGridView(GridView gridView) {
+        MainActivity.gridView = gridView;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -109,9 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if (!item.getImage().equals(""))
                                 dataGrid.add(item);
-                          //  initPhotos(MainActivity.this);
                         }
-                        ViewPager viewPager = findViewById(R.id.view_pager);
+                        viewPager = findViewById(R.id.view_pager);
                         viewPager.setAdapter(
                                 new SampleFragmentPagerAdapter(getSupportFragmentManager(), MainActivity.this));
                         TabLayout tabLayout = findViewById(R.id.tab_layout);
@@ -138,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
             @Override
             public void onError(VKError error) {
 // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
@@ -148,4 +165,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+           // getPreviousLayout();
+            super.onBackPressed();
+            System.out.println("privet");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

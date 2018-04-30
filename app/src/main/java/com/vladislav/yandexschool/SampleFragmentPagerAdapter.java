@@ -15,8 +15,8 @@ import com.vladislav.yandexschool.fragments.YourSavedPicsFragment;
  */
 
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 4;
-    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3", "q" };
+    final int PAGE_COUNT = 3;
+    private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3" };
     private Context context;
 
     public SampleFragmentPagerAdapter(FragmentManager fm, Context context) {

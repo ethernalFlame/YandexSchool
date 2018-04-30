@@ -19,6 +19,7 @@ public class YourSavedPicsFragment extends PageFragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
+    private GridView gridView;
 
     public static PageFragment newInstance(int page) {
         YourSavedPicsFragment fragment;
@@ -26,7 +27,6 @@ public class YourSavedPicsFragment extends PageFragment {
         args.putInt(ARG_PAGE, page);
         fragment = new YourSavedPicsFragment();
         fragment.setArguments(args);
-        System.out.println(page + "page number");
         return fragment;
     }
 
@@ -36,19 +36,21 @@ public class YourSavedPicsFragment extends PageFragment {
         if (getArguments() != null) {
             mPage = getArguments().getInt(ARG_PAGE);
         }
-        System.out.println("sozdanie");
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.your_saved_pics, container, false);
-      //  MainActivity.initPhotos(getContext());
-        System.out.println((getContext() == null) + " ой а как же так");
         GridViewAdapter adapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, MainActivity.getDataGrid());
-        GridView gridView = (GridView) view;
+        gridView = (GridView) view;
+        MainActivity.setGridView(gridView);
         if (gridView!=null)
         gridView.setAdapter(adapter);
         return view;
+    }
+
+    public GridView getGridView() {
+        return gridView;
     }
 }
