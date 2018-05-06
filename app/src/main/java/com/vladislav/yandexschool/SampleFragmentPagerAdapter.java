@@ -16,8 +16,8 @@ import com.vladislav.yandexschool.fragments.YourSavedPicsFragment;
  */
 
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "Tab1", "Сохраненные картинки", "Tab3" };
+    final int PAGE_COUNT = 1;
+    private String tabTitles[] = new String[] { "Сохраненные картинки" };
     private Context context;
 
     public SampleFragmentPagerAdapter(FragmentManager fm, Context context) {
@@ -30,10 +30,11 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override public Fragment getItem(int position) {
-        if (position==1)
+        if (position==0)
             return YourSavedPicsFragment.newInstance(position+1);
-        else if (position==2)
-            return CachedPics.newInstance(position+1);
+// Недоработанная фича
+//        else if (position==2)
+//            return CachedPics.newInstance(position+1);
         return PageFragment.newInstance(position + 1);
     }
 

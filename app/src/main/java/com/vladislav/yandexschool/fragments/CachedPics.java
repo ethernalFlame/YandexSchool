@@ -14,7 +14,7 @@ import com.vladislav.yandexschool.R;
 /**
  * Created by vladi on 02.05.2018.
  */
-
+// Недоработанная фича
 public class CachedPics extends PageFragment{
     public static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
@@ -40,13 +40,12 @@ public class CachedPics extends PageFragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.your_saved_pics, container, false);
+        View view = inflater.inflate(R.layout.cached_pics, container, false);
         GridViewAdapter adapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, MainActivity.getSaved());
         gridView = (GridView) view;
-        MainActivity.setGridView(gridView);
+        MainActivity.setSavedGridView(gridView);
         if (gridView!=null)
             gridView.setAdapter(adapter);
-        System.out.println(MainActivity.getSaved().size() + "РАЗМЕР СОХРОВ");
         return view;
     }
 

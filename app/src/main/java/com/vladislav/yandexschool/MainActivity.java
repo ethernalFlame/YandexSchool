@@ -29,6 +29,7 @@ import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private String filename, path;
     private File tmpFile;
     private String[] scope = new String[]{VKScope.MESSAGES, VKScope.FRIENDS, VKScope.WALL, VKScope.PHOTOS};
+
+    // Кусок недоработанной фичи
     private Target target = new Target() {
         @Override
         public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -47,22 +50,20 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
 
-                    File file = new File(Environment.getExternalStorageDirectory()
-                            .getPath() + filename);
-                    file.getParentFile().mkdirs();
-                    System.out.println(file.getAbsolutePath());
-                    try
-                    {
-                        System.out.println(file.exists() + "exists");
-                        file.createNewFile();
-                        path = file.getAbsolutePath();
-                        FileOutputStream ostream = new FileOutputStream(file);
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
-                        ostream.close();
-                    }
-                    catch (Exception e)
-                    {
+                    FileOutputStream out = null;
+                    try {
+                        out = new FileOutputStream(filename);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                    } catch (Exception e) {
                         e.printStackTrace();
+                    } finally {
+                        try {
+                            if (out != null) {
+                                out.close();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -114,28 +115,68 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.gridView = gridView;
     }
 
-    public void savePics(){
-        for (int i = 0; i < dataGrid.size(); i++) {
-            filename = dataGrid.get(i) + ".jpg";
-            //filename = dataGrid.get(i).getImage();
-            GridItem tmp = new GridItem();
-            tmp.setImage(path);
-           // tmp.setImage(dataGrid.get(i).getImage());
-            savedGrid.add(tmp);
-           // System.out.println(path);
-            Picasso.get().load(dataGrid.get(i).getImage()).into(target);
 
-        }
+    //Недоработанная фича
+    public void savePics() {
+        for (int i = 0; i < dataGrid.size(); i++) {
+            filename = getExternalFilesDir("PICTURE").getPath() + dataGrid.get(i) + ".jpg";
+                GridItem tmp = new GridItem();
+
+                savedGrid.add(tmp);
+                Picasso.get().load(dataGrid.get(i).getImage()).into(getTarget(String.valueOf(i)));
+                tmp.setImage(Environment.getExternalStorageDirectory().getPath() + "/" + i);
+            }
     }
 
     public static GridView getSavedGridView() {
         return savedGridView;
     }
 
+    private Target getTarget(final String url){
+        Target target = new Target(){
+
+            @Override
+            public void onBitmapLoaded(final Bitmap bitmap, Picasso.LoadedFrom from) {
+                new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/" + url);
+                        try {
+                            file.createNewFile();
+                            FileOutputStream ostream = new FileOutputStream(file);
+                            path = Environment.getExternalStorageDirectory().getPath() + "/" + url;
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, ostream);
+                            ostream.flush();
+                            ostream.close();
+                        } catch (IOException e) {
+                           e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+        return target;
+    }
+
     public static void setSavedGridView(GridView savedGridView) {
         MainActivity.savedGridView = savedGridView;
     }
 
+
+    //Загрузка фотографий
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
@@ -149,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         gridView = findViewById(R.id.grid_view);
-                        savedGridView = findViewById(R.id.grid_view);
+                        savedGridView = findViewById(R.id.cached_pics_grid);
                         VKPhotoArray list = (VKPhotoArray) response.parsedModel;
                         dataGrid = new ArrayList<>(list.size());
                         savedGrid = new ArrayList<>(list.size());
@@ -188,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
                         TabLayout tabLayout = findViewById(R.id.tab_layout);
                         tabLayout.setupWithViewPager(viewPager);
                         Toast.makeText(MainActivity.this, "Кол-во фоток: " + list.size(), Toast.LENGTH_SHORT).show();
-                        savePics();
                     }
 
                     @Override
@@ -221,7 +261,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             super.onBackPressed();
-            System.out.println("privet");
             return true;
         }
         return super.onOptionsItemSelected(item);

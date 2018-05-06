@@ -26,7 +26,6 @@ public class PageFragment extends Fragment {
         args.putInt(ARG_PAGE, page);
             fragment = new PageFragment();
         fragment.setArguments(args);
-        System.out.println(page + "page number");
         return fragment;
     }
 

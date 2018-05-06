@@ -10,6 +10,8 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+
+// Активити, содержащий картинку, открытую во весь экран
 public class FullPicActivity extends AppCompatActivity {
 
     @Override
@@ -21,18 +23,23 @@ public class FullPicActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.picture_layout);
+
+        //Кнопка назад и ее показ
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Intent intent = getIntent();
 
-        System.out.println("ONCREATE FULLPIC");
         ImageView tmp = findViewById(R.id.picture_full);
+        //Активити во весь экран
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         Picasso.get().load(intent.getStringExtra("PICTURE")).noFade().into(tmp);
         createListener(tmp, this);
     }
 
+
+    //Нажатие на экран и вывод кнопки назад
     private void createListener(ImageView view, AppCompatActivity activity){
         view.setOnClickListener(new View.OnClickListener() {
             boolean flag = false;

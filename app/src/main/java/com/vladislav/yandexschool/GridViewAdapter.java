@@ -3,6 +3,8 @@ package com.vladislav.yandexschool;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -62,6 +65,9 @@ public class GridViewAdapter extends ArrayAdapter<GridItem> {
         Picasso.get().load(item.getImage()).noFade().into(holder.imageView);
         final MainActivity main = (MainActivity) mContext;
 
+
+
+        // Открытие картинки во весь экран
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

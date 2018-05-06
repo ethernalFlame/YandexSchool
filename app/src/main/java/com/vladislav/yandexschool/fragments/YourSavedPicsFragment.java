@@ -15,6 +15,8 @@ import com.vladislav.yandexschool.R;
  * Created by vladi on 20.04.2018.
  */
 
+
+// Фрагмент, содержащий гридвью с сохраненными картинками
 public class YourSavedPicsFragment extends PageFragment {
     public static final String ARG_PAGE = "ARG_PAGE";
 
